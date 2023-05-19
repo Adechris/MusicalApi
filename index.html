@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product log</title>
+    <link rel="stylesheet" href="../Bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../Bootstrap/fontawesome-free-5.10.1-web/css/all.css">
+</head>
+<body onload="displayProducts()">
+    <div class="container my-3">
+        <h2 class="text-center text-warning my-3">MY PRODUCTS TODAY</h2>
+        <input type="text" class="form-control shadow-none my-2" placeholder="Product..." id="product">
+      
+        <button class="btn btn-outline-success" onclick="getUsers()">submit</button>
+        <div id="show"></div>
+        <div id="display"></div>
+    </div>
+    <script>
+        var allProducts = []
+
+        function displayProducts(){
+            show.innerHTML = ''
+            table = `<table class='table table-bordered my-5 mx-5'><thead><tr><th>S/N</th><th>PRODUCTS</th><th>DELETE</th><th>EDIT</th></tr></thead>`
+            for (let index = 0; index < allProducts.length; index++) {
+                table += `<tr>
+                    <td>${index +1}</td>
+                <td>  ${allProducts[index].product}</td>
+                <td>    <button onclick='deleteProduct(${index})' class='btn btn-danger'><i class='fa fa-trash'></i></button> </td>
+                <td>    <button onclick='editProduct(${index})' class='btn btn-success'><i class='fa fa-edit'></i></button> </td>
+                    </tr>`;
+            }
+            show.innerHTML += `${table}`
+            product.value = ''
+            localStorage.setItem('product',JSON.stringify(allProducts))
+            
+        }
+
+        function deleteProduct(index){
+            allProducts.splice(index,1)
+            displayProducts()
+            localStorage.setItem('product',allProducts)
+        }
+        function editProduct(index){
+            display.innerHTML = `
+            <input type='text'  class="form-control shadow-none my-2" placeholder='Enter Your new Product' value='${allProducts[index].product}' id='prod'>
+            <button class='btn btn-primary' onclick='update(${index})'>Save Changes</button>
+            `
+            localStorage.setItem('product', allProducts)
+        }
+        function update(index){
+            var newDetails = {
+                product:prod.value,
+                
+            }
+            allProducts.splice(index,1,newDetails)
+            displayProducts()
+            prod.value= ''
+            display.innerHTML = ''
+        }
+
+      function getUsers(){
+        var production = {
+            product:product.value,
+           
+        }
+        if (product.value == '' ) {
+            alert('Input should not be empty')
+        } else {
+            allProducts.push(production)
+        displayProducts() 
+        }
+       
+      }
+
+    </script>
+</body>
+</html>
